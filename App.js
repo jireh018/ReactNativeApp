@@ -7,6 +7,12 @@ import * as firebase from 'firebase'
 //import 'firebase/auth'
 //import 'firebase/firestore'
 
+import {Provider} from 'react-redux'
+import {createStore, applyMiddleware} from 'redux'
+import rootReducer from './redux/reducers'
+import thunk from 'redux-thunk'
+const store = createStore(rootReducer, applyMiddleware(thunk))
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBkaJJfmGQ9shcTtCZiF8-FilNEgKq5-94",
@@ -30,6 +36,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
+import MainScreen from './components/Main'
 
 const Stack = createStackNavigator();
 
@@ -85,11 +92,10 @@ export class App extends Component {
     }
 
     return(
-      <View style={{
-        flex:1, justifyContent:'center'
-    }}>
-        <Text>User logged in</Text>
-      </View>
+      <Provider store={store}>
+        <MainScreen />
+      </Provider>
+      
     )
   }
   
