@@ -3,22 +3,21 @@ import {TextInput, Text, View, Button, TouchableWithoutFeedbackBase} from 'react
 
 import firebase from 'firebase'
 
-export class Register extends Component {
+export class Login extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             email: '',
             password: '',
-            name: ''
         }
 
         this.onSignUp = this.onSignUp.bind(this)
     }
 
     onSignUp() {
-        const {email, password, name} = this.state;
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        const {email, password} = this.state;
+        firebase.auth().signInWithEmailAndPassword(email, password)
         .then((result) => {
             console.log(result)
         })
@@ -31,10 +30,6 @@ export class Register extends Component {
         return(
             <View>
                 <TextInput
-                    placeholder="name"
-                    onChangeText={(name) => this.setState({name})}
-                />
-                <TextInput
                     placeholder="email"
                     onChangeText={(email) => this.setState({email})}
                 />
@@ -46,11 +41,11 @@ export class Register extends Component {
 
                 <Button 
                     onPress={() => this.onSignUp()}
-                    title="Sign Up"
+                    title="Sign In"
                 />
             </View>
         )
     }
 };
 
-export default Register;
+export default Login;
