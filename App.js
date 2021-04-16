@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import * as firebase from 'firebase'
@@ -33,23 +33,67 @@ import LoginScreen from './components/auth/Login'
 
 const Stack = createStackNavigator();
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen name="Landing" component={LandingScreen} options={{HeaderShown:false}} />
-        <Stack.Screen name="Register" component={RegisterScreen}/>
-        <Stack.Screen name="Login" component={LoginScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+
+export class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      loaded: false,
+    }
+  }
+
+  componentDidMount(){
+    firebase.auth().onAuthStateChanged((user) => {
+      if(!user){
+        this.setState({
+          loggedIn:false,
+          loaded:true
+        })
+      }else {
+        this.setState({
+          loggedIn:true,
+          loaded:true
+        })
+      }
+    })
+  }
+
+  render() {
+    const { loggedIn, loaded} = this.state
+    if(!loaded)
+    {
+      return(
+        <View style={{
+          flex:1, justifyContent:'center'
+      }}>
+          <Text>Loading</Text>
+        </View>
+      )
+    }
+
+    if(!loggedIn)
+    {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen name="Landing" component={LandingScreen} options={{HeaderShown:false}} />
+            <Stack.Screen name="Register" component={RegisterScreen}/>
+            <Stack.Screen name="Login" component={LoginScreen}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+
+    return(
+      <View style={{
+        flex:1, justifyContent:'center'
+    }}>
+        <Text>User logged in</Text>
+      </View>
+    )
+  }
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+export default App;
