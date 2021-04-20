@@ -36,7 +36,10 @@ import {createStackNavigator} from '@react-navigation/stack'
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register'
 import LoginScreen from './components/auth/Login'
+
 import MainScreen from './components/Main'
+import AddScreen from './components/main/Add'
+//import ProfileScreen from './components/main/Profile'
 
 const Stack = createStackNavigator();
 
@@ -96,6 +99,7 @@ export class App extends Component {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Main">
             <Stack.Screen name="Main" component={MainScreen} options={{HeaderShown:false}} />
+            <Stack.Screen name="Add" component={AddScreen} />
           </Stack.Navigator>
         </NavigationContainer>   
       </Provider>
