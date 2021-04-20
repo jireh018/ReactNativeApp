@@ -93,7 +93,11 @@ export class App extends Component {
 
     return(
       <Provider store={store}>
-        <MainScreen />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen name="Main" component={MainScreen} options={{HeaderShown:false}} />
+          </Stack.Navigator>
+        </NavigationContainer>   
       </Provider>
       
     )
