@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
+  const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
@@ -12,6 +14,14 @@ export default function App() {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  const takePicture = async () => {
+    if(camera){
+      const data = await camera.takePictureAsync(null);
+      console.log(data.uri);
+      setImage(data.uri);
+    }
+  }
 
   if (hasPermission === null) {
     return <View />;
@@ -22,8 +32,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.cameracontainer}>
-        <Camera style={styles.fixedRatio} type={type} 
-                ratio={'1:1'}
+        <Camera 
+          ref={ref => setCamera(ref)}
+          style={styles.fixedRatio} 
+          type={type} 
+          ratio={'1:1'}
         />
       </View>
 
@@ -37,7 +50,9 @@ export default function App() {
                   : Camera.Constants.Type.back
               );
             }} />
-          
+
+          <Button title="Take picture" onPress={() => takePicture()} />
+          {image && <Image source={{uri: image}} style={{flex:1}} />}
     </View>
   );
 }
